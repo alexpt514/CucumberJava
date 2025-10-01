@@ -125,16 +125,8 @@ public class LandingPageStep {
 	@And("added item should appear with correct quantity {int}")
 	public void getItemQuant(int quant) {
 		
-		//landing.clickCart();
-		String actualQuant =landing.getProductCartQuant().split(" ")[0].trim();
-		String expectedQuant = String.valueOf(quant);
-
-		System.out.println("Expected: " + quant);
-		System.out.println("Actual quantity of each item: " + actualQuant);
+		landing.getProductCartQuant(quant);
 		
-		Assert.assertEquals(expectedQuant, actualQuant);
-
-
 	}
 	
 	

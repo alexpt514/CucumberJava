@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.junit.Assert;
 
 import factory.DriverManage;
 
@@ -26,12 +27,17 @@ public class LandingPageActions {
 	By noResults = By.className("no-results");
 	By cart = By.className("cart-icon");
 	By productCartQuant = By.className("quantity");
+	By productCartQuantTotal = By.className("product-total");
+	By productCartEachQuant = By.xpath("//*[@id='root']/div/header/div/div[3]/div[2]/div[1]/div[1]/ul/li[%s]/div[2]/p[1]");
+	
+	By productCartList = By.xpath("//*[@id='root']/div/header/div/div[3]/div[2]/div[1]/div[1]/ul/li");
 	//By productCartQuant = By.xpath("//*[@id='root']/div/header/div/div[3]/div[2]/div[1]/div[1]/ul/li/div[2]/p[1]");
 	By productCart = By.className("product-info");
 	By addCart = By.className("product-action");
 	By proceedCheckOut = By.className("action-block");
 	By cartItemQuant = By.className("cart-items");
 	By itemQuant = By.xpath("//*[@id=\"root\"]/div/header/div/div[3]/div[1]/table/tbody/tr[1]/td[3]/strong");
+	
 
 	public LandingPageActions(WebDriver driver) {
 
@@ -130,7 +136,7 @@ public class LandingPageActions {
 		driver.findElement(cart).click();
 	}
 	
-	public String getProductCartQuant() {
+	public String getProductCartQuant(int expectedQuant) {
 		
 		try {
 	        Thread.sleep(2000); // Let the user see the typed text
@@ -145,22 +151,46 @@ public class LandingPageActions {
 		        if (!elements.isEmpty()) {
 		        	driver.findElement(cart).click();
 		        	
-		    		try {
-		    	        Thread.sleep(2000); // Let the user see the typed text
-		    	    } catch (InterruptedException e) {
-		    	        e.printStackTrace();
-		    	    }
-		        	
+
+		    	    Thread.sleep(2000); // Let the user see the typed text
+		    	    
+		    	    List<WebElement> productCartLists = driver.findElements(productCartList);
+		    	    
+		    	    List<WebElement> testList = driver.findElements(productCartQuantTotal);
+		    	    
+		    	    //String[] texts= driver.findElement((By) productCartList).getText();
+		    	   
+		    	    System.out.println("Cart Item List Size" + productCartLists.size());
 		    		
 		        	quant =driver.findElement(productCartQuant).getText();
+		        	
+		        	for (int i = 1; i < productCartLists.size(); i++) {
+		        	    int actualQuant = Integer.parseInt(driver.findElement(By.xpath("//*[@id='root']/div/header/div/div[3]/div[2]/div[1]/div[1]/ul/li["+i+"]/div[2]/p[1]")).getText().split(" ")[0].trim()); // get the quant of each item,
+		        	    
+		        	    //System.out.println("Item " + i + ": " + item.getText());
+		        	    System.out.println("Item name:  "+ productCartLists.get(0).getText());
+		        	    Assert.assertEquals(expectedQuant, actualQuant);
+		        	}
+		        	
+		        	
+		        	for (int i = 0; i < testList.size(); i++) {
+		        	    
+		        	    //System.out.println("Item " + i + ": " + item.getText());
+		        	    System.out.println("!!!!!!!!!!!!!Test list Item name:  "+ testList.get(i).getText());
+		        	   
+		        	}
+		        	
 		        } else {
 		            System.out.println("Element not present. No action taken.");
 		        }
-		    } catch (Exception e) {
+		  } catch (Exception e) {
 		        System.out.println("Exception occurred while checking or clicking: " + e.getMessage());
 		    }
 		  
+		  //catch(IOException | Exception ex)
+		  //"//*[@id='root']/div/header/div/div[3]/div[2]/div[1]/div[1]/ul/li["+i+"]/div[2]/p[1]"
 		  
+
 		  
 		    // Get all cart items
 			/*
